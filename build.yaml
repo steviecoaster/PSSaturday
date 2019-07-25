@@ -12,7 +12,7 @@ steps:
   inputs:
     targetType: 'inline'
     script: |
-      $changes = gci C:\Git\PSSaturday -Recurse -Include '*.nuspec','*.ps1' | ? { $_.LastWriteTime -gt (Get-Date).AddHours(-3) }
+      $changes = gci $pwd -Recurse -Include '*.nuspec','*.ps1' | ? { $_.LastWriteTime -gt (Get-Date).AddHours(-3) }
       
       If($changes.Count -gt 0) {
       $nuspecLocation =  ($changes | ? { $_.Extension -eq '.nuspec' -and $_.Directory}).DirectoryName
