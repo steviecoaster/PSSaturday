@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
   <metadata>
-    <id>keeper-password-manager</id>
-    <version>14.7.1</version>    <packageSourceUrl>https://github.com/steviecoaster/PSSaturday</packageSourceUrl>
+    <id>bob</id>
+    <version>1.0</version>    <packageSourceUrl>https://github.com/steviecoaster/PSSaturday</packageSourceUrl>
     <owners>steviecoaster</owners>
-    <title>keeper-password-manager (Install)</title>
+    <title>bob (Install)</title>
     <authors>Keeper Security, Inc</authors>
     <projectUrl>https://_Software_Location_REMOVE_OR_FILL_OUT_</projectUrl>
     <copyright>Year Software Vendor</copyright>
