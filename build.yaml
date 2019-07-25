@@ -8,6 +8,7 @@ trigger:
     - develop
 steps:
 - task: PowerShell@2
+  displayName: 'Get nuspec Location'
   inputs:
     targetType: 'inline'
     script: |
@@ -18,6 +19,10 @@ steps:
       $nuspecName = (gci -Path $nuspecLocation -Filter '*.nuspec').Name
       
       echo "##vso[task.setvariable variable=NuspecLocation]$nuspecLocation"
+      echo "##vso[task.setvariable variable=NuspecName]$nuspecName"
+
+      Write-Host "My location is $env:NUSPECLOCATION"
+      Write-Host "My name is $env:NUSPECNAME"
       
       }
       
@@ -30,6 +35,15 @@ steps:
   displayName: 'Chocolatey pack'
   inputs:
     packNuspecFileName: 'keeper-password-manager.nuspec'
+- task: PowerShell@2
+  displayName: 'Find nupkg'
+  inputs:
+    targetType: 'inline'
+    script: |
+      $Nupkg = (gci $env:NUSPECLOCATION -Filter '*.nupkg').FullName
+            
+      echo "##vso[task.setvariable variable=NuspecLocation]$Nupkg"
+    failOnStderr: true
 - task: gep13.chocolatey-azuredevops.chocolatey-azuredevops.ChocolateyCommand@0
   displayName: 'Chocolatey push'
   inputs:
