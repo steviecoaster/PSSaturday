@@ -18,11 +18,11 @@ steps:
       $nuspecLocation =  ($changes | ? { $_.Extension -eq '.nuspec' -and $_.Directory}).DirectoryName
       $nuspecName = (gci -Path $nuspecLocation -Filter '*.nuspec').Name
       
-      echo "##vso[task.setvariable variable=NuspecLocation]$nuspecLocation"
-      echo "##vso[task.setvariable variable=NuspecName]$nuspecName"
+      echo "##vso[task.setvariable variable=NUSPECLOCATION]$nuspecLocation"
+      echo "##vso[task.setvariable variable=NUSPECNAME]$nuspecName"
 
-      Write-Host "My location is $env:NUSPECLOCATION"
-      Write-Host "My name is $env:NUSPECNAME"
+      Write-Host "My location is ($env:NUSPECLOCATION)"
+      Write-Host "My name is ($env:NUSPECNAME)"
       
       }
       
