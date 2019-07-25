@@ -1,0 +1,21 @@
+pool:
+  name: Choco
+trigger:
+  branches:
+    include:
+    - master
+    exclude:
+    - develop
+steps:
+- task: gep13.chocolatey-azuredevops.chocolatey-azuredevops.ChocolateyCommand@0
+  displayName: 'Chocolatey pack'
+  inputs:
+    packNuspecFileName: 'keeper-password-manager.nuspec'
+- task: gep13.chocolatey-azuredevops.chocolatey-azuredevops.ChocolateyCommand@0
+  displayName: 'Chocolatey push'
+  inputs:
+    command: push
+    pushNupkgFileName: 'keeper-password-manager.14.7.1.nupkg'
+    pushSource: 'http://localhost:8081/artifactory/api/nuget/choco-local'
+    pushApikey: $(ChocoApiKey)
+    pushForce: true
