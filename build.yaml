@@ -7,6 +7,25 @@ trigger:
     exclude:
     - develop
 steps:
+- task: PowerShell@2
+  inputs:
+    targetType: 'inline'
+    script: |
+      $changes = gci C:\Git\PSSaturday -Recurse -Include '*.nuspec','*.ps1' | ? { $_.LastWriteTime -gt (Get-Date).AddHours(-3) }
+      
+      If($changes.Count -gt 0) {
+      $nuspecLocation =  ($changes | ? { $_.Extension -eq '.nuspec' -and $_.Directory}).DirectoryName
+      $nuspecName = (gci -Path $nuspecLocation -Filter '*.nuspec').Name
+      
+      echo "##vso[task.setvariable variable=NuspecLocation]$nuspecLocation"
+      
+      }
+      
+      else { 
+      
+      throw "No suitable changes detected to build chocolatey package"
+      }
+    failOnStderr: true
 - task: gep13.chocolatey-azuredevops.chocolatey-azuredevops.ChocolateyCommand@0
   displayName: 'Chocolatey pack'
   inputs:
