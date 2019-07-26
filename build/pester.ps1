@@ -4,7 +4,7 @@ If(!(Get-Module Pester)){
 
 Import-Module Pester
 
-. ./Get-ChocolateyPackageMetaData.ps1
+. "/Get-ChocolateyPackageMetaData.ps1"
 
 Invoke-Pester ../tests/package.tests.ps1
 
