@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
   <metadata>
     <id>bob</id>
-    <version>1.0</version>    <packageSourceUrl>https://github.com/steviecoaster/PSSaturday</packageSourceUrl>
+    <version>1.0.1</version>    <packageSourceUrl>https://github.com/steviecoaster/PSSaturday</packageSourceUrl>
     <owners>steviecoaster</owners>
     <title>bob (Install)</title>
     <authors>Keeper Security, Inc</authors>
