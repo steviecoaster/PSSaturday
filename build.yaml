@@ -39,7 +39,8 @@ steps:
     targetType: 'inline'
     script: |
       Write-Host $pwd
-      $Nupkg = (gci $(Split-Path -Parent $pwd) -Filter '*.nupkg').FullName
+      Write-Host "$(Split-Path -Parent $pwd)"
+      $Nupkg = (gci $(Split-Path -Parent $pwd) -Recurse -Filter '*.nupkg').FullName
       Write-Host $Nupkg
       echo "##vso[task.setvariable variable=NupkgLocation]$Nupkg"
     failOnStderr: true
