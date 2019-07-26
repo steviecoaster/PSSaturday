@@ -12,7 +12,7 @@
     <docsUrl>https://docs.keeper.io/user-guides/web-vault</docsUrl>
     <tags>CI/CD</tags>
     <summary>The cake is a lie</summary>
-    <description>With Keeper, you can securely store and autofill unlimited passwords with our free password manager. You’ll never have to remember or worry about passwords again.</description>
+    <description>Seriously, you can't have cake.</description>
   </metadata>
   <files>
     <!-- this section controls what actually gets packaged into the Chocolatey package -->
