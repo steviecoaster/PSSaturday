@@ -21,7 +21,7 @@ steps:
       $packageName = $filter.Basename
       echo "##vso[task.setvariable variable=NUSPECLOCATION]$nuspecLocation"
       echo "##vso[task.setvariable variable=NUSPECNAME]$nuspec"
-      echo "##vso[task.setvariable variable=Package"]$packageName"
+      echo "##vso[task.setvariable variable=Package]$packageName"
       
       }
       
