@@ -12,7 +12,7 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <tags>CI/CD</tags>
     <summary>The cake is a lie</summary>
-    <description>Seriously, you can't have cake. For real.s</description>
+    <description>Make some more changes. Yay!</description>
   </metadata>
   <files>
     <!-- this section controls what actually gets packaged into the Chocolatey package -->
