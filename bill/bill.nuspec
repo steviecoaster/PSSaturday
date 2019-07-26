@@ -12,7 +12,7 @@
     <docsUrl>https://docs.keeper.io/user-guides/web-vault</docsUrl>
     <tags>CI/CD</tags>
     <summary>The cake is a lie</summary>
-    <description>Seriously, you can't have cake. For real.</description>
+    <description>Seriously, you can't have cake. For real.s</description>
   </metadata>
   <files>
     <!-- this section controls what actually gets packaged into the Chocolatey package -->
