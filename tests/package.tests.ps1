@@ -4,7 +4,7 @@ $functionpath = "$(Split-Path -Parent $testPath)\build\Get-ChocolateyPackageMeta
 
 . $functionpath
 
-$package = Get-ChocolateyPackageMetaData -NuspecFile "C:\Git\PSSaturday\bill\bill.nuspec"
+$package = Get-ChocolateyPackageMetaData -NuspecFile "$env:NUSPECNAME"
 Describe "Packages should contain certain information" {
 
     It "Has a proper semver version" {
