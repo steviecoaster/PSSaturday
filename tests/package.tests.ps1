@@ -1,4 +1,8 @@
-. "./scripts/Get-ChocolateyPackageMetadata.ps1"
+$testPath =  $(Split-Path -Parent $MyInvocation.MyCommand.Definition)
+$functionpath = "$(Split-Path -Parent $testPath)\build\Get-ChocolateyPackageMetaData.ps1"
+
+
+. $functionpath
 
 $package = Get-ChocolateyPackageMetaData -NuspecFile "C:\Git\PSSaturday\bill\bill.nuspec"
 Describe "Packages should contain certain information" {
