@@ -11,7 +11,7 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <docsUrl>https://docs.keeper.io/user-guides/web-vault</docsUrl>
     <tags>CI/CD</tags>
-    <summary>Installs the 32-bit or 64-bit version of Keeper desktop</summary>
+    <summary>The cake is a lie</summary>
     <description>With Keeper, you can securely store and autofill unlimited passwords with our free password manager. You’ll never have to remember or worry about passwords again.</description>
   </metadata>
   <files>
