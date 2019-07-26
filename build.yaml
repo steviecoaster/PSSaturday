@@ -6,7 +6,6 @@ trigger:
     - master
     exclude:
     - develop
-  pr: none
 steps:
 - task: PowerShell@2
   displayName: 'Get nuspec Location'
