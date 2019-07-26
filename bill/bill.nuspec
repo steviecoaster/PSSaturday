@@ -2,14 +2,14 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
   <metadata>
     <id>bill</id>
-    <version>1.0.0</version>    <packageSourceUrl>https://github.com/steviecoaster/PSSaturday</packageSourceUrl>
+    <version>1.0.1</version>    
+    <packageSourceUrl>https://github.com/steviecoaster/PSSaturday</packageSourceUrl>
     <owners>steviecoaster</owners>
     <title>bill (Install)</title>
-    <authors>Keeper Security, Inc</authors>
-    <projectUrl>https://_Software_Location_REMOVE_OR_FILL_OUT_</projectUrl>
-    <copyright>Year Software Vendor</copyright>
+    <authors>Stephen Valdinger</authors>
+    <projectUrl>https://github.com/steviecoaster/PSSaturday/</projectUrl>
+    <copyright>2019</copyright>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <docsUrl>https://docs.keeper.io/user-guides/web-vault</docsUrl>
     <tags>CI/CD</tags>
     <summary>The cake is a lie</summary>
     <description>Seriously, you can't have cake. For real.s</description>
