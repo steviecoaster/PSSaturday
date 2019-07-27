@@ -1,58 +1,72 @@
 pool:
   name: Choco
-trigger:
-  branches:
-    include:
-    - master
-    exclude:
-    - develop
+- job: Fetch
 steps:
+- powershell: |
+   $changes = gci $pwd -Recurse -Include '*.nuspec','*.ps1' | ? { $_.LastWriteTime -gt (Get-Date).AddMinutes(-5) }
+         
+         If($changes.Count -gt 0) {
+         $nuspecLocation =  ($changes | ? { $_.Extension -eq '.nuspec' -and $_.Directory}).DirectoryName
+         $filter =  gci -Path $nuspecLocation -Filter '*.nuspec' | Select-Object FullName, BaseName,Name
+         $nuspec = $filter.Fullname
+         $packageName = $filter.Basename
+         $artifact = $filter.Name
+         echo "##vso[task.setvariable variable=NUSPECLOCATION]$nuspecLocation"
+         echo "##vso[task.setvariable variable=NUSPECNAME]$nuspec"
+         echo "##vso[task.setvariable variable=ArtifactName]$artifact"
+         echo "##vso[task.setvariable variable=Package;isOutput=true]$packageName"
+         
+         }
+         
+         else { 
+         
+         throw "No suitable changes detected to build chocolatey package"
+         }
+  failOnStderr: true
+  displayName: 'Get Nuspec Location'
+  name: 'NuspecLocation'
 - task: PowerShell@2
-  displayName: 'Get nuspec Location'
+  displayName: 'Run Pester Tests'
+  name: Pester
   inputs:
-    targetType: 'inline'
-    script: |
-      $changes = gci $pwd -Recurse -Include '*.nuspec','*.ps1' | ? { $_.LastWriteTime -gt (Get-Date).AddHours(-1) }
-      
-      If($changes.Count -gt 0) {
-      $nuspecLocation =  ($changes | ? { $_.Extension -eq '.nuspec' -and $_.Directory}).DirectoryName
-      $filter =  gci -Path $nuspecLocation -Filter '*.nuspec' | Select-Object FullName, BaseName
-      $nuspec = $filter.Fullname
-      $packageName = $filter.Basename
-      echo "##vso[task.setvariable variable=NUSPECLOCATION]$nuspecLocation"
-      echo "##vso[task.setvariable variable=NUSPECNAME]$nuspec"
-      echo "##vso[task.setvariable variable=Package]$packageName"
-      
-      }
-      
-      else { 
-      
-      throw "No suitable changes detected to build chocolatey package"
-      }
-    failOnStderr: true
+    targetType: filePath
+    filePath: ./build/pester.ps1
+- task: PublishTestResults@2
+  displayName: 'Publish Test Results'
+  name: PublishTests
+  inputs:
+    testResultsFormat: NUnit
+    testResultsFiles: '$(Package)*.XML'
+    searchFolder: '$(Build.ArtifactStagingDirectory)'
+    failTaskOnFailedTests: true
 - task: gep13.chocolatey-azuredevops.chocolatey-azuredevops.ChocolateyCommand@0
   displayName: 'Chocolatey pack'
+  name: Pack
   inputs:
-    packNuspecFileName: $(NUSPECNAME)
-- task: PowerShell@2
-  displayName: 'Find nupkg'
+    packNuspecFileName: '$(NUSPECNAME)'
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish Artifact'
+  name: PublishArtifacts
   inputs:
-    targetType: 'inline'
-    script: |
-      $Nupkg = (gci $(Split-Path -Parent $pwd) -Recurse -Filter '*.nupkg').FullName
-      echo "##vso[task.setvariable variable=NupkgLocation]$Nupkg"
-    failOnStderr: true
+    ArtifactName: '$(Package)'
+- job:
+dependsOn: Fetch
+pool:
+  name: Hosted VS2017
+steps:
 - task: gep13.chocolatey-azuredevops.chocolatey-azuredevops.ChocolateyCommand@0
-  displayName: 'Chocolatey push'
+  displayName: 'Chocolatey install test'
+  name: InstallTest
   inputs:
-    command: push
-    pushNupkgFileName: $(NupkgLocation)
-    pushSource: 'http://localhost:8081/artifactory/api/nuget/choco-local'
-    pushApikey: $(ChocoApiKey)
-    pushForce: true
+    command: install
+    extraArguments: '-y'
+    installPackageId: '$[dependencies.Fetch.outputs['NuspecLocation.Package']]'
+    installSource: '$(Build.ArtifactStagingDirectory)'
+    installInstallArgs: '-'
 - task: gep13.chocolatey-azuredevops.chocolatey-azuredevops.ChocolateyCommand@0
-  displayName: 'Verify Package'
+  displayName: 'Chocolatey Uninstall test'
+  name: UninstallTest
   inputs:
-    command: 'custom'
-    customCommand: 'list'
-    customArguments: '$(Package), -s http://localhost:8081/artifactory/api/nuget/choco-local'
+    command: custom
+    customCommand: uninstall
+    customArguments: '$(Package)'
