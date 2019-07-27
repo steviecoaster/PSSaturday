@@ -11,23 +11,24 @@ jobs:
     name: Choco
   steps:
   - task: PowerShell@2
-  displayName: 'Get Nuspec Location'
-  name: NuspecSearch
+    name: NuspecSearch
+    displayName: 'Get Nuspec Location'
+  
   inputs:
     targetType: filePath
     filePath: ./search.ps1
     failOnStderr: true
 
   - task: PowerShell@2
-    displayName: 'Run Pester Tests'
-    name: Pester
+      displayName: 'Run Pester Tests'
+      name: Pester
     inputs:
       targetType: filePath
       filePath: ./build/pester.ps1
 
   - task: PublishTestResults@2
-    displayName: 'Publish Test Results'
-    name: PublishTests
+      displayName: 'Publish Test Results'
+      name: PublishTests
     inputs:
       testResultsFormat: NUnit
       testResultsFiles: '$(Package)*.XML'
@@ -35,19 +36,21 @@ jobs:
       failTaskOnFailedTests: true
 
   - task: gep13.chocolatey-azuredevops.chocolatey-azuredevops.ChocolateyCommand@0
-    displayName: 'Chocolatey pack'
-    name: Pack
+      displayName: 'Chocolatey pack'
+      name: Pack
     inputs:
       packNuspecFileName: '$(NUSPECNAME)'
 
   - task: PublishBuildArtifacts@1
-    displayName: 'Publish Artifact'
-    name: PublishArtifacts
+      displayName: 'Publish Artifact'
+      name: PublishArtifacts
     inputs:
       ArtifactName: '$(Package)'
 
 - job: SubsequentA
   dependsOn: FetchNupkgChange
+  pool:
+    vmImage: 'vs2017-win2016'
   steps:
   - task: gep13.chocolatey-azuredevops.chocolatey-azuredevops.ChocolateyCommand@0
   displayName: 'Chocolatey install test'
@@ -66,8 +69,3 @@ jobs:
     command: custom
     customCommand: uninstall
     customArguments: $[dependencies.Fetch.outputs['NuspecSearch.Package']]
-
-- job: SubsequentB
-  dependsOn: InitialJob
-  steps:
-  - script: echo hello from subsequent B
