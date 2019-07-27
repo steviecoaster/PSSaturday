@@ -8,7 +8,7 @@ jobs:
 - job: Fetch
   pool:
     name: Choco
-steps:
+
 - task: PowerShell@2
   displayName: 'Get Nuspec Location'
   name: NuspecSearch
@@ -38,6 +38,7 @@ steps:
   name: Pack
   inputs:
     packNuspecFileName: '$(NUSPECNAME)'
+
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Artifact'
   name: PublishArtifacts
@@ -48,7 +49,6 @@ steps:
   dependsOn: Fetch
   pool:
     vmimage: 'vs2017-win2016'
-steps:
 - task: gep13.chocolatey-azuredevops.chocolatey-azuredevops.ChocolateyCommand@0
   displayName: 'Chocolatey install test'
   name: InstallTest
@@ -65,4 +65,4 @@ steps:
   inputs:
     command: custom
     customCommand: uninstall
-    customArguments: '$(Package)'
+    customArguments: $[dependencies.Fetch.outputs['NuspecLocation.Package']]
