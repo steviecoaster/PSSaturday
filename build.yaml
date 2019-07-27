@@ -49,10 +49,10 @@ steps:
   name: PublishArtifacts
   inputs:
     ArtifactName: '$(Package)'
-- job:
-dependsOn: Fetch
 pool:
   name: Hosted VS2017
+- job: TestInstall
+dependsOn: Fetch
 steps:
 - task: gep13.chocolatey-azuredevops.chocolatey-azuredevops.ChocolateyCommand@0
   displayName: 'Chocolatey install test'
