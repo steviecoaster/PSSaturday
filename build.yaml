@@ -8,7 +8,7 @@ jobs:
 - job: Fetch
   pool:
     name: Choco
-steps:
+
 - powershell: |
    $changes = gci $pwd -Recurse -Include '*.nuspec','*.ps1' | ? { $_.LastWriteTime -gt (Get-Date).AddMinutes(-5) }
          
