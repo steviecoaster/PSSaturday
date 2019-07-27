@@ -1,3 +1,4 @@
+name: YAML Test
 trigger:
   branches:
     include:
@@ -5,11 +6,11 @@ trigger:
     exclude:
     - develop
 jobs:
-- job: Fetch
+- job: FetchNupkgChange
   pool:
     name: Choco
-
-- task: PowerShell@2
+  steps:
+  - task: PowerShell@2
   displayName: 'Get Nuspec Location'
   name: NuspecSearch
   inputs:
@@ -17,45 +18,44 @@ jobs:
     filePath: ./search.ps1
     failOnStderr: true
 
-- task: PowerShell@2
-  displayName: 'Run Pester Tests'
-  name: Pester
-  inputs:
-    targetType: filePath
-    filePath: ./build/pester.ps1
+  - task: PowerShell@2
+    displayName: 'Run Pester Tests'
+    name: Pester
+    inputs:
+      targetType: filePath
+      filePath: ./build/pester.ps1
 
-- task: PublishTestResults@2
-  displayName: 'Publish Test Results'
-  name: PublishTests
-  inputs:
-    testResultsFormat: NUnit
-    testResultsFiles: '$(Package)*.XML'
-    searchFolder: '$(Build.ArtifactStagingDirectory)'
-    failTaskOnFailedTests: true
+  - task: PublishTestResults@2
+    displayName: 'Publish Test Results'
+    name: PublishTests
+    inputs:
+      testResultsFormat: NUnit
+      testResultsFiles: '$(Package)*.XML'
+      searchFolder: '$(Build.ArtifactStagingDirectory)'
+      failTaskOnFailedTests: true
 
-- task: gep13.chocolatey-azuredevops.chocolatey-azuredevops.ChocolateyCommand@0
-  displayName: 'Chocolatey pack'
-  name: Pack
-  inputs:
-    packNuspecFileName: '$(NUSPECNAME)'
+  - task: gep13.chocolatey-azuredevops.chocolatey-azuredevops.ChocolateyCommand@0
+    displayName: 'Chocolatey pack'
+    name: Pack
+    inputs:
+      packNuspecFileName: '$(NUSPECNAME)'
 
-- task: PublishBuildArtifacts@1
-  displayName: 'Publish Artifact'
-  name: PublishArtifacts
-  inputs:
-    ArtifactName: '$(Package)'
+  - task: PublishBuildArtifacts@1
+    displayName: 'Publish Artifact'
+    name: PublishArtifacts
+    inputs:
+      ArtifactName: '$(Package)'
 
-- job: TestInstall
-  dependsOn: Fetch
-  pool:
-    vmimage: 'vs2017-win2016'
-- task: gep13.chocolatey-azuredevops.chocolatey-azuredevops.ChocolateyCommand@0
+- job: SubsequentA
+  dependsOn: FetchNupkgChange
+  steps:
+  - task: gep13.chocolatey-azuredevops.chocolatey-azuredevops.ChocolateyCommand@0
   displayName: 'Chocolatey install test'
   name: InstallTest
   inputs:
     command: install
     extraArguments: '-y'
-    installPackageId: $[dependencies.Fetch.outputs['NuspecLocation.Package']]
+    installPackageId: $[dependencies.FetchNupkgChange.outputs['NuspecSearch.Package']]
     installSource: '$(Build.ArtifactStagingDirectory)'
     installInstallArgs: '-'
 
@@ -65,4 +65,9 @@ jobs:
   inputs:
     command: custom
     customCommand: uninstall
-    customArguments: $[dependencies.Fetch.outputs['NuspecLocation.Package']]
+    customArguments: $[dependencies.Fetch.outputs['NuspecSearch.Package']]
+
+- job: SubsequentB
+  dependsOn: InitialJob
+  steps:
+  - script: echo hello from subsequent B
