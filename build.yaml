@@ -63,7 +63,7 @@ steps:
   inputs:
     command: install
     extraArguments: '-y'
-    installPackageId: '$[dependencies.Fetch.outputs['NuspecLocation.Package']]'
+    installPackageId: $[dependencies.Fetch.outputs['NuspecLocation.Package']]
     installSource: '$(Build.ArtifactStagingDirectory)'
     installInstallArgs: '-'
 - task: gep13.chocolatey-azuredevops.chocolatey-azuredevops.ChocolateyCommand@0
