@@ -8,7 +8,7 @@ jobs:
 - job: Fetch
   pool:
     name: Choco
-
+steps:
 - task: PowerShell@2
   displayName: 'Get Nuspec Location'
   name: NuspecSearch
@@ -47,8 +47,8 @@ jobs:
 - job: TestInstall
   dependsOn: Fetch
   pool:
-    name: Hosted VS2017
-
+    vmimage: 'vs2017-win2016'
+steps:
 - task: gep13.chocolatey-azuredevops.chocolatey-azuredevops.ChocolateyCommand@0
   displayName: 'Chocolatey install test'
   name: InstallTest
