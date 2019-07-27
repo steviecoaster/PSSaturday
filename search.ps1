@@ -12,7 +12,7 @@ $changes = gci $pwd -Recurse -Include '*.nuspec','*.ps1' | ? { $_.LastWriteTime 
       echo "##vso[task.setvariable variable=NUSPECLOCATION]$nuspecLocation"
       echo "##vso[task.setvariable variable=NUSPECNAME]$nuspec"
       echo "##vso[task.setvariable variable=ArtifactName]$artifact"
-      echo "##vso[task.setvariable variable=Package;isOutput=true]$packageName"
+      echo "##vso[task.setvariable variable=Package]$packageName"
       
       }
       
