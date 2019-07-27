@@ -4,8 +4,11 @@ $changes = gci $pwd -Recurse -Include '*.nuspec','*.ps1' | ? { $_.LastWriteTime 
       $nuspecLocation =  ($changes | ? { $_.Extension -eq '.nuspec' -and $_.Directory}).DirectoryName
       $filter =  gci -Path $nuspecLocation -Filter '*.nuspec' | Select-Object FullName, BaseName,Name
       $nuspec = $filter.Fullname
+      echo "Nuspec path: $nuspec"
       $packageName = $filter.Basename
+      echo "Package name: $packageName"
       $artifact = $filter.Name
+      echo $artifact
       echo "##vso[task.setvariable variable=NUSPECLOCATION]$nuspecLocation"
       echo "##vso[task.setvariable variable=NUSPECNAME]$nuspec"
       echo "##vso[task.setvariable variable=ArtifactName]$artifact"
