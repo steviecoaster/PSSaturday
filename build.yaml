@@ -9,35 +9,22 @@ jobs:
   pool:
     name: Choco
 
-- powershell: |
-   $changes = gci $pwd -Recurse -Include '*.nuspec','*.ps1' | ? { $_.LastWriteTime -gt (Get-Date).AddMinutes(-5) }
-         
-         If($changes.Count -gt 0) {
-         $nuspecLocation =  ($changes | ? { $_.Extension -eq '.nuspec' -and $_.Directory}).DirectoryName
-         $filter =  gci -Path $nuspecLocation -Filter '*.nuspec' | Select-Object FullName, BaseName,Name
-         $nuspec = $filter.Fullname
-         $packageName = $filter.Basename
-         $artifact = $filter.Name
-         echo "##vso[task.setvariable variable=NUSPECLOCATION]$nuspecLocation"
-         echo "##vso[task.setvariable variable=NUSPECNAME]$nuspec"
-         echo "##vso[task.setvariable variable=ArtifactName]$artifact"
-         echo "##vso[task.setvariable variable=Package;isOutput=true]$packageName"
-         
-         }
-         
-         else { 
-         
-         throw "No suitable changes detected to build chocolatey package"
-         }
-  failOnStderr: true
+steps:
+- - task: PowerShell@2
   displayName: 'Get Nuspec Location'
-  name: 'NuspecLocation'
+  name: NuspecSearch
+  inputs:
+    targetType: filePath
+    filePath: ./search.ps1
+    failOnStderr: true
+
 - task: PowerShell@2
   displayName: 'Run Pester Tests'
   name: Pester
   inputs:
     targetType: filePath
     filePath: ./build/pester.ps1
+
 - task: PublishTestResults@2
   displayName: 'Publish Test Results'
   name: PublishTests
@@ -46,6 +33,7 @@ jobs:
     testResultsFiles: '$(Package)*.XML'
     searchFolder: '$(Build.ArtifactStagingDirectory)'
     failTaskOnFailedTests: true
+
 - task: gep13.chocolatey-azuredevops.chocolatey-azuredevops.ChocolateyCommand@0
   displayName: 'Chocolatey pack'
   name: Pack
@@ -71,6 +59,7 @@ jobs:
     installPackageId: $[dependencies.Fetch.outputs['NuspecLocation.Package']]
     installSource: '$(Build.ArtifactStagingDirectory)'
     installInstallArgs: '-'
+
 - task: gep13.chocolatey-azuredevops.chocolatey-azuredevops.ChocolateyCommand@0
   displayName: 'Chocolatey Uninstall test'
   name: UninstallTest
