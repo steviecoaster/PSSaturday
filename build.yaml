@@ -1,7 +1,8 @@
-pool:
-  name: Choco
+
 jobs:
 - job: Fetch
+  pool:
+  name: Choco
 steps:
 - powershell: |
    $changes = gci $pwd -Recurse -Include '*.nuspec','*.ps1' | ? { $_.LastWriteTime -gt (Get-Date).AddMinutes(-5) }
@@ -50,11 +51,11 @@ steps:
   name: PublishArtifacts
   inputs:
     ArtifactName: '$(Package)'
-pool:
-  name: Hosted VS2017
-jobs:
+
 - job: TestInstall
-dependsOn: Fetch
+  dependsOn: Fetch
+  pool:
+  name: Hosted VS2017
 steps:
 - task: gep13.chocolatey-azuredevops.chocolatey-azuredevops.ChocolateyCommand@0
   displayName: 'Chocolatey install test'
