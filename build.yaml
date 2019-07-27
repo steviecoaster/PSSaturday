@@ -9,7 +9,6 @@ jobs:
   pool:
     name: Choco
 
-steps:
 - task: PowerShell@2
   displayName: 'Get Nuspec Location'
   name: NuspecSearch
