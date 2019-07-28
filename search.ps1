@@ -1,4 +1,4 @@
-$changes = gci $pwd -Recurse -Include '*.nuspec' | Where-Object { $_.Name -eq $env:ChangedNuspec }
+$changes = Get-ChildItem $env:Build_SourcesDirectory -Recurse -Filter '*.nuspec' | Where-Object { $_.Name -eq $env:ChangedNuspec }
 
 $changes
 
