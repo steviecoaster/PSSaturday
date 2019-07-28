@@ -17,6 +17,6 @@ $NuspecFile = $filter.Name
 echo $artifact
 
 
-echo "##vso[task.setvariable variable=NuspecDirectory$nuspecLocation"
+echo "##vso[task.setvariable variable=NuspecDirectory]$nuspecLocation"
 echo "##vso[task.setvariable variable=Nuspec]$nuspec"
 echo "##vso[task.setvariable variable=NuspecFile]$NuspecFile"
