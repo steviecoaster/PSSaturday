@@ -12,7 +12,7 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <tags>CI/CD</tags>
     <summary>The cake is a lie</summary>
-    <description>Make some more changes. Yay! Git commit change.</description>
+    <description>Make some more changes. Yay! Git commit.</description>
   </metadata>
   <files>
     <!-- this section controls what actually gets packaged into the Chocolatey package -->
