@@ -13,11 +13,10 @@ echo "Nuspec path: $nuspec"
 $packageName = $filter.Basename
 echo "Package name: $packageName"
 
-$artifact = $filter.Name
+$NuspecFile = $filter.Name
 echo $artifact
 
 
-echo "##vso[task.setvariable variable=NUSPECLOCATION]$nuspecLocation"
-echo "##vso[task.setvariable variable=NUSPECNAME]$nuspec"
-echo "##vso[task.setvariable variable=ArtifactName]$artifact"
-echo "##vso[task.setvariable variable=Package]$packageName"
+echo "##vso[task.setvariable variable=NuspecDirectory$nuspecLocation"
+echo "##vso[task.setvariable variable=Nuspec]$nuspec"
+echo "##vso[task.setvariable variable=NuspecFile]$NuspecFile"
