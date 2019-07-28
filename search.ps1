@@ -1,3 +1,6 @@
+$PWD
+$env:Build_SourcesDirectory
+
 $changes = Get-ChildItem $env:Build_SourcesDirectory -Recurse -Filter '*.nuspec' | Where-Object { $_.Name -eq $env:ChangedNuspec }
 
 $changes
