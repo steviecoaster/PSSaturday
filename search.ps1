@@ -1,4 +1,4 @@
-$changes = gci $pwd -Recurse -Include '*.nuspec','*.ps1' | ? { $_.LastWriteTime -gt (Get-Date).AddMinutes(-5) }
+$changes = gci $pwd -Recurse -Include '*.nuspec' | Where-Object { $_.Name -eq $env:ChangedNuspec }
       
       If($changes.Count -gt 0) {
       $nuspecLocation =  ($changes | ? { $_.Extension -eq '.nuspec' -and $_.Directory}).DirectoryName
